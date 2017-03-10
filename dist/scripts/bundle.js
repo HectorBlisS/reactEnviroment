@@ -50766,13 +50766,15 @@ var AuthorForm = React.createClass({displayName: "AuthorForm",
 						label: "First Name", 
 						value: this.props.author.firsName, 
 						onChange: this.props.onChange, 
-						placeholder: "Tu nombre"}), 
+						placeholder: "Tu nombre", 
+						error: this.props.errors.firstName}), 
 
 					React.createElement(Input, {
 						name: "lastName", 
 						label: "Last Name", 
 						value: this.props.author.lastName, 
-						onChange: this.props.onChange}), 
+						onChange: this.props.onChange, 
+						error: this.props.errors.lastName}), 
 
 					React.createElement("input", {type: "submit", value: "Save", className: "btn btn-default", onClick: this.props.onSave})
 				
@@ -50886,7 +50888,8 @@ var ManageAuthorPage = React.createClass({displayName: "ManageAuthorPage",
 				id: '',
 				firstName: '',
 				lastName: ''
-			}
+			},
+			errors: {}
 		};
 	},
 
@@ -50894,11 +50897,36 @@ var ManageAuthorPage = React.createClass({displayName: "ManageAuthorPage",
 		var field = event.target.name;
 		var value = event.target.value;
 		this.state.author[field] = value;
+		// toastr.success('andas escribiendo');
 		return this.setState({author: this.state.author});
+	},
+
+	authorFormIsValid: function(){
+		var formIsValid = true;
+		this.state.errors = {}; //clear any previous errors
+
+		if (this.state.author.firstName.length < 3){
+			this.state.errors.firstName = 'Tu nombre debe contener al menos 3 letras.';
+			formIsValid = false;
+		}
+
+		if (this.state.author.lastName.length < 3){
+			this.state.errors.lastName = 'Tu apellido debe contener al menos 3 letras.';
+			formIsValid = false;
+		}
+
+		this.setState({
+			errors: this.state.errors
+		});
+		return formIsValid;
 	},
 
 	saveAuthor: function(event){
 		event.preventDefault();
+		if (!this.authorFormIsValid()){
+			toastr.warning('Hay errores en el formulario');
+			return;
+		}
 		AuthorApi.saveAuthor(this.state.author);
 		toastr.success('Author guardado correctamente');
 		this.transitionTo('authors');
@@ -50913,7 +50941,8 @@ var ManageAuthorPage = React.createClass({displayName: "ManageAuthorPage",
 				React.createElement(AuthorForm, {
 					author: this.state.author, 
 					onChange: this.setAuthorState, 
-					onSave: this.saveAuthor})
+					onSave: this.saveAuthor, 
+					errors: this.state.errors})
 
 			)
 
@@ -50975,14 +51004,15 @@ var Input = React.createClass({displayName: "Input",
 		return (
 				React.createElement("div", {className: wrapperClass}, 
 					React.createElement("label", {htmlFor: this.props.name}, this.props.label), 
-					React.createElement("div", {clssName: "field"}, 
+					React.createElement("div", {className: "field"}, 
 						React.createElement("input", {type: "text", 
 							name: this.props.name, 
 							className: "form-control", 
 							placeholder: this.props.placeholder, 
 							ref: this.props.name, 
 							value: this.props.value, 
-							onChange: this.props.onChange})
+							onChange: this.props.onChange}), 
+						React.createElement("div", {className: "input"}, this.props.error)
 					)
 				)
 			);
