@@ -8,7 +8,7 @@ var Home = React.createClass({
 	render: function(){
 		return (
 			<div className="jumbotron">
-				<h1><a href="#about">Fixter Admin</a></h1>
+				<h1>Fixter Admin</h1>
 				<p>React, React router, and flux for ultra responsive web apps</p>
 				<Link to="about" className="btn btn-primary btn-lg">Saber más...</Link>
 			</div>
