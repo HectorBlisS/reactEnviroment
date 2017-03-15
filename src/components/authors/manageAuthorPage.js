@@ -80,8 +80,13 @@ var ManageAuthorPage = React.createClass({
 			toastr.warning('Hay errores en el formulario');
 			return;
 		}
+
+		if (this.state.author.id){
+			AuthorActions.updateAuthor(this.state.author);	
+		} else {
+			AuthorActions.createAuthor(this.state.author);
+		}
 		// AuthorApi.saveAuthor(this.state.author);
-		AuthorActions.createAuthor(this.state.author);
 		this.setState({dirty: false});
 		toastr.success('Author guardado correctamente');
 		this.transitionTo('authors');

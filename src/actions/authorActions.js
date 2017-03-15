@@ -14,6 +14,24 @@ var AuthorActions = {
 			actionType: ActionTypes.CREATE_AUTHOR,
 			author: newAuthor
 		});
+	},
+
+	updateAuthor: function(author){
+		var editedAuthor = AuthorApi.saveAuthor(author);
+
+		Dispatcher.dispatch({
+			actionType: ActionTypes.UPDATE_AUTHOR,
+			author: editedAuthor
+		});
+	},
+
+	deleteAuthor: function(id){
+		AuthorApi.deleteAuthor(id);
+
+		Dispatcher.dispatch({
+			actionType: ActionTypes.DELETE_AUTHOR,
+			id: id
+		});
 	}
 };
 

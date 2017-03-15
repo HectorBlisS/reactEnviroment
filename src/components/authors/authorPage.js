@@ -14,6 +14,18 @@ var Authors = React.createClass({
 		};
 	},
 
+	componentWillMount: function() {
+		AuthorStore.addChangeListener(this._onChange);
+	},
+
+	componentWillUnMount: function() {
+		AuthorStore.removeChangeListener(this._onChange);
+	},
+
+	_onChange: function(){
+		this.setState({authors: AuthorStore.getAllAuthors()});
+	},
+
 	// componentDidMount: function(){
 	// 	if (this.isMounted()){
 	// 		this.setState({
